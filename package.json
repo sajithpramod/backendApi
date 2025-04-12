@@ -8,7 +8,8 @@
     "test": "cross-env NODE_ENV=test dotenv -e .env.test -- jest tests",
     "migrate": "node-pg-migrate up",
     "migrate:down": "node-pg-migrate down",
-    "migrate:test": "node-pg-migrate up -e test"
+    "migrate:test": "node-pg-migrate up -e test",
+    "lint": "eslint ."
   },
   "author": "",
   "license": "ISC",
@@ -27,10 +28,13 @@
     "winston": "^3.17.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.24.0",
     "cross-env": "^7.0.3",
     "dotenv-cli": "^8.0.0",
     "eslint": "^9.24.0",
     "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.0.0",
     "jest": "^29.7.0",
     "node-pg-migrate": "^7.9.1",
     "nodemon": "^3.1.9",

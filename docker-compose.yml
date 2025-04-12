@@ -69,6 +69,7 @@ services:
 
 volumes:
   pgdata:
+  pgdata_test:
 
 networks:
   app-net:

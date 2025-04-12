@@ -1,0 +1,47 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - PGHOST=db
+      - PGUSER=postgres
+      - PGPASSWORD=postgres
+      - PGDATABASE=myapp_db
+      - PGPORT=5432
+      - PORT=3000
+    depends_on:
+      - db
+    networks:
+      - app-net
+
+  db:
+    image: postgres:15
+    ports:
+      - "5432:5432"   # 👈 This is crucial!
+    environment:
+      POSTGRES_USER: postgres          # optional (default is 'postgres')
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: myapp_db         # 👈 this ensures the DB is created
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-net
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - app-net
+
+volumes:
+  pgdata:
+
+networks:
+  app-net:

@@ -18,7 +18,7 @@ jobs:
           node-version: '18'
 
       - name: Install Docker Compose (already included, safety step)
-        run: docker-compose --version
+        run: docker compose --version
 
       - name: Start services
         run: make up

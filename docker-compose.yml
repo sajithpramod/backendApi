@@ -7,12 +7,14 @@ services:
       - PGHOST=db
       - PGUSER=postgres
       - PGPASSWORD=postgres
-      - PGDATABASE=myapp_db
+      - PGDATABASE=myapp_db  # Default DB for runtime
       - PGPORT=5432
       - PORT=3000
     depends_on:
       db:
         condition: service_healthy
+    volumes:
+      - .env.test:/app/.env.test  # Mount .env.test
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
       interval: 10s
@@ -38,23 +40,6 @@ services:
       retries: 5
     networks:
       - app-net
-  db_test:
-    image: postgres:15
-    ports:
-      - "5433:5432"
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: myapp_test_db
-    volumes:
-      - pgdata_test:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - app-net      
 
   nginx:
     image: nginx:alpine
@@ -69,7 +54,6 @@ services:
 
 volumes:
   pgdata:
-  pgdata_test:
 
 networks:
   app-net:

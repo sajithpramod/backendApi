@@ -26,7 +26,7 @@ restart:
 # View logs
 logs:
 	$(DOCKER_COMPOSE) logs -f app
-	
+
 migrate:
 	$(DOCKER_COMPOSE) exec app $(MIGRATION_CMD) up	
 
@@ -43,5 +43,5 @@ create:
 	$(DOCKER_COMPOSE) exec app $(MIGRATION_CMD) create $(name) -e test
 
 # Create the test DB manually if needed (optional)
-create-db:
+create-test-db:
 	$(DOCKER_COMPOSE) exec db psql -U postgres -c "CREATE DATABASE myapp_test_db;"

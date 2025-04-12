@@ -1,4 +1,4 @@
-name: Run Tests on PR
+name: CI - Dockerized Tests
 
 on:
   pull_request:
@@ -7,16 +7,33 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
 
-      - name: Set up Node
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install Docker Compose (already included, safety step)
+        run: docker-compose --version
 
-      - name: Run Jest tests
-        run: npm test
+      - name: Start services
+        run: make up
+
+      - name: Run DB Migrations
+        run: make migrate
+
+      - name: Wait for app to be ready
+        run: |
+          echo "Waiting for app to be ready..."
+          sleep 10 # Optional: Replace with curl health check
+
+      - name: Run Tests in Container
+        run: docker exec restapi-node-app-1 npm test
+
+      - name: Shut down services
+        if: always()
+        run: make down

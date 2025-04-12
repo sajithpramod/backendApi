@@ -1,5 +1,5 @@
 # Variables
-DOCKER_COMPOSE = docker-compose
+DOCKER_COMPOSE = docker compose
 MIGRATION_CONTAINER = restapi-node-app-1
 MIGRATION_CMD = npx node-pg-migrate
 

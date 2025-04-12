@@ -22,6 +22,7 @@ const generateTokens = (user) => {
 
   return { accessToken, refreshToken };
 };
+
 exports.register = async (req, res) => {
   const { email, password, role } = req.body;
 

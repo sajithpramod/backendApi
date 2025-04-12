@@ -1,0 +1,51 @@
+name: CI - Dockerized Tests
+
+on:
+  pull_request:
+    branches: [develop]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Check Docker Compose version
+        run: docker compose version
+
+      - name: Start Docker containers
+        run: docker compose up -d
+
+      - name: Wait for app to be healthy
+        run: |
+          echo "Waiting for app to be healthy..."
+          for i in {1..10}; do
+            STATUS=$(docker inspect --format='{{.State.Health.Status}}' $(docker compose ps -q app))
+            echo "Current app health: $STATUS"
+            if [ "$STATUS" = "healthy" ]; then
+              echo "App is healthy!"
+              break
+            fi
+            sleep 5
+            if [ "$i" -eq 10 ]; then
+              echo "App did not become healthy in time"
+              exit 1
+            fi
+          done
+
+      - name: Run DB Migrations
+        run: docker compose exec app npx node-pg-migrate up
+
+      - name: Run Tests inside app container
+        run: docker compose exec app npm test
+
+      - name: Shut down Docker services
+        if: always()
+        run: docker compose down

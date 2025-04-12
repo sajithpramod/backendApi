@@ -7,12 +7,14 @@ services:
       - PGHOST=db
       - PGUSER=postgres
       - PGPASSWORD=postgres
-      - PGDATABASE=myapp_db
+      - PGDATABASE=myapp_db  # Default DB for runtime
       - PGPORT=5432
       - PORT=3000
     depends_on:
       db:
         condition: service_healthy
+    volumes:
+      - .env.test:/app/.env.test  # Mount .env.test
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
       interval: 10s

@@ -1,10 +1,10 @@
 # Variables
 DOCKER_COMPOSE = docker compose
-MIGRATION_CONTAINER = restapi-node-app-1
+MIGRATION_CONTAINER = app
 MIGRATION_CMD = npx node-pg-migrate
 
 # Targets
-.PHONY: up down restart logs migrate migrate-down create-db
+.PHONY: build up down restart logs migrate migrate-down create create-db
 
 # Rebuild app container
 build:
@@ -27,19 +27,21 @@ restart:
 logs:
 	$(DOCKER_COMPOSE) logs -f app
 
-# Run migrations (up)
 migrate:
-	$(DOCKER_COMPOSE) exec app $(MIGRATION_CMD) up
+	$(DOCKER_COMPOSE) exec app $(MIGRATION_CMD) up	
 
-# Rollback last migration (down)
+# Run migrations (test env)
+migrate-testdb:
+	$(DOCKER_COMPOSE) exec app $(MIGRATION_CMD) up -e test
+
+# Rollback last migration (test env)
 migrate-down:
-	$(DOCKER_COMPOSE) exec app $(MIGRATION_CMD) down
+	$(DOCKER_COMPOSE) exec app $(MIGRATION_CMD) down -e test
 
-# Create migration file: make create name=your_migration_name
+# Create migration file with test env: make create name=your_migration_name
 create:
-	$(DOCKER_COMPOSE) exec app $(MIGRATION_CMD) create $(name)
+	$(DOCKER_COMPOSE) exec app $(MIGRATION_CMD) create $(name) -e test
 
-# Create DB if needed (only if you're managing it via script)
-create-db:
-	$(DOCKER_COMPOSE) exec db psql -U $$POSTGRES_USER -c "CREATE DATABASE $$POSTGRES_DB;"
-
+# Create the test DB manually if needed (optional)
+create-test-db:
+	$(DOCKER_COMPOSE) exec db psql -U postgres -c "CREATE DATABASE myapp_test_db;"

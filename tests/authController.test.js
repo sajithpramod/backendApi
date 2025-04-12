@@ -1,7 +1,7 @@
 const request = require('supertest');
 const app = require('../src/app'); // your Express app
 const knex = require('../src/db');
-// const pgmigrate  = require('node-pg-migrate');
+
 const truncateAllTables = require('./truncateAllTables');
 
 beforeAll(async () => {

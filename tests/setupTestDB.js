@@ -9,6 +9,7 @@ module.exports = async () => {
     noLock: true,
   };
 
+
   // Rollback all migrations
   await pgmigrate.default({
     ...migrationConfig,

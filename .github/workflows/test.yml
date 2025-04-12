@@ -2,7 +2,7 @@ name: CI - Dockerized Tests
 
 on:
   pull_request:
-    branches: [main]
+    branches: [develop]
 
 jobs:
   test:
@@ -17,23 +17,33 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install Docker Compose (already included, safety step)
-        run: docker compose --version
+      - name: Check Docker Compose version
+        run: docker compose version
 
-      - name: Start services
+      - name: Build the app
+        run: make build
+
+      - name: Start Docker containers
         run: make up
+
+      - name: Wait for app container to be running
+        run: |
+          echo "Waiting for app container to be up..."
+          for i in {1..10}; do
+            if docker compose ps app | grep -q "running"; then
+              echo "App is running!"
+              break
+            fi
+            echo "Waiting... ($i/10)"
+            sleep 5
+          done
 
       - name: Run DB Migrations
         run: make migrate
 
-      - name: Wait for app to be ready
-        run: |
-          echo "Waiting for app to be ready..."
-          sleep 10 # Optional: Replace with curl health check
+      - name: Run Tests inside app container
+        run: docker compose exec app npm test
 
-      - name: Run Tests in Container
-        run: docker exec restapi-node-app-1 npm test
-
-      - name: Shut down services
+      - name: Shut down Docker services
         if: always()
         run: make down

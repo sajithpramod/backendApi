@@ -42,7 +42,7 @@ describe('Auth Controller', () => {
   test('Login fails with wrong password', async () => {
     const res = await request(app)
       .post('/api/auth/login')
-      .send({ email: userData.email, password: 'wrongpass' });
+      .send({ email: userData.email, password: 'wrongpass1' });
 
     expect(res.statusCode).toBe(401);
   });

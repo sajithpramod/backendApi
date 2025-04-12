@@ -8,6 +8,7 @@ beforeAll(async () => {
   await truncateAllTables();
 
 });
+
 afterAll(async () => {
   await knex.destroy();
 });

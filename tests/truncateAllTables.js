@@ -12,5 +12,4 @@ const truncateAllTables = async () => {
     await knex.raw(`TRUNCATE TABLE "${row.tablename}" RESTART IDENTITY CASCADE`);
   }
 };
-
 module.exports = truncateAllTables;

@@ -73,7 +73,6 @@ describe('User Controller', () => {
       .set('Authorization', `Bearer ${accessToken}`);
 
     console.log('get user', res.body);
-
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
   });

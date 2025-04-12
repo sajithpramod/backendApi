@@ -39,7 +39,7 @@ jobs:
           done
 
       - name: Run DB Migrations
-        run: make migrate
+        run: make migrate-testdb
 
       - name: Run Tests inside app container
         run: docker compose exec app npm test

@@ -1,3 +1,6 @@
+// .node-pg-migrate.config.js
+require('dotenv').config({ path: '.env.test' });
+
 module.exports = {
   migrationDirectory: 'migrations',
   direction: 'up',

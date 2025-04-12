@@ -6,25 +6,7 @@ const truncateAllTables = require('./truncateAllTables');
 
 beforeAll(async () => {
   await truncateAllTables();
-  // await pgmigrate.default({
-  //     databaseUrl: process.env.TEST_DATABASE_URL,
-  //     dir: 'migrations',
-  //     direction: 'down',
-  //     count: Infinity,
-  //     migrationsTable: 'pgmigrations',
-  //     noLock: true,
-  //   });
 
-  // await pgmigrate.default({
-  //     databaseUrl: process.env.TEST_DATABASE_URL,
-  //     dir: 'migrations',
-  //     direction: 'up',
-  //     count: Infinity,
-  //     migrationsTable: 'pgmigrations',
-  //     createSchema: true,
-  //     noLock: true,
-  //     verbose: false,
-  //   });
 });
 
 afterAll(async () => {

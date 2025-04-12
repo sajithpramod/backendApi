@@ -1,32 +1,13 @@
 const request = require('supertest');
 const app = require('../src/app'); // your Express app
 const knex = require('../src/db');
-const pgmigrate  = require('node-pg-migrate');
+
 const truncateAllTables = require('./truncateAllTables');
 
 beforeAll(async () => {
-    await truncateAllTables();
-    // await pgmigrate.default({
-    //     databaseUrl: process.env.TEST_DATABASE_URL,
-    //     dir: 'migrations',
-    //     direction: 'down',
-    //     count: Infinity,
-    //     migrationsTable: 'pgmigrations',
-    //     noLock: true,
-    //   });
-    
-    // await pgmigrate.default({
-    //     databaseUrl: process.env.TEST_DATABASE_URL,
-    //     dir: 'migrations',
-    //     direction: 'up',
-    //     count: Infinity,
-    //     migrationsTable: 'pgmigrations',
-    //     createSchema: true,
-    //     noLock: true,
-    //     verbose: false,
-    //   });
+  await truncateAllTables();
+
 });
-  
 
 afterAll(async () => {
   await knex.destroy();
@@ -61,7 +42,7 @@ describe('Auth Controller', () => {
   test('Login fails with wrong password', async () => {
     const res = await request(app)
       .post('/api/auth/login')
-      .send({ email: userData.email, password: 'wrongpass' });
+      .send({ email: userData.email, password: 'wrongpass1' });
 
     expect(res.statusCode).toBe(401);
   });

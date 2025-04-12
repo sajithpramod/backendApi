@@ -11,15 +11,15 @@ const authenticateToken = (req, res, next) => {
 
   jwt.verify(token, SECRET, (err, decoded) => {
     if (err){
-        logger.info('Jwt token is not valid'); 
-        return res.sendStatus(403);
+      logger.info('Jwt token is not valid');
+      return res.sendStatus(403);
     }
-    
-    logger.info('Jwt token is  valid'); 
+
+    logger.info('Jwt token is  valid');
     req.user = decoded;
     next();
   });
- 
+
 };
 
 module.exports = authenticateToken;

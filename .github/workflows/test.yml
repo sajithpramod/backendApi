@@ -1,0 +1,49 @@
+name: CI - Dockerized Tests
+
+on:
+  pull_request:
+    branches: [develop]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Check Docker Compose version
+        run: docker compose version
+
+      - name: Build the app
+        run: make build
+
+      - name: Start Docker containers
+        run: make up
+
+      - name: Wait for app container to be running
+        run: |
+          echo "Waiting for app container to be up..."
+          for i in {1..10}; do
+            if docker compose ps app | grep -q "running"; then
+              echo "App is running!"
+              break
+            fi
+            echo "Waiting... ($i/10)"
+            sleep 5
+          done
+
+      - name: Run DB Migrations
+        run: make migrate-testdb
+
+      - name: Run Tests inside app container
+        run: docker compose exec app npm test
+
+      - name: Shut down Docker services
+        if: always()
+        run: make down

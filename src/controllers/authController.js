@@ -50,8 +50,8 @@ exports.login = async (req, res) => {
     const user = await knex('users')
       .where({ email })
       .first();
-     
-    logger.info(`Send user email ${email}`);  
+
+    logger.info(`Send user email ${email}`);
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ message: 'Invalid credentials' });

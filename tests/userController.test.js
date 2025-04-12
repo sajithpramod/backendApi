@@ -7,28 +7,28 @@ const truncateAllTables = require('./truncateAllTables');
 let accessToken;
 
 beforeAll(async () => {
-    await truncateAllTables();
+  await truncateAllTables();
 
-    await pgmigrate.default({
-        databaseUrl: process.env.TEST_DATABASE_URL,
-        dir: 'migrations',
-        direction: 'down',
-        count: Infinity,
-        migrationsTable: 'pgmigrations',
-        noLock: true,
-      });
-    
+  await pgmigrate.default({
+    databaseUrl: process.env.TEST_DATABASE_URL,
+    dir: 'migrations',
+    direction: 'down',
+    count: Infinity,
+    migrationsTable: 'pgmigrations',
+    noLock: true,
+  });
 
-    await pgmigrate.default({
-        databaseUrl: process.env.TEST_DATABASE_URL,
-        dir: 'migrations',
-        direction: 'up',
-        count: Infinity,
-        migrationsTable: 'pgmigrations',
-        createSchema: true,
-        noLock: true,
-        verbose: false,
-      });
+
+  await pgmigrate.default({
+    databaseUrl: process.env.TEST_DATABASE_URL,
+    dir: 'migrations',
+    direction: 'up',
+    count: Infinity,
+    migrationsTable: 'pgmigrations',
+    createSchema: true,
+    noLock: true,
+    verbose: false,
+  });
   // Optionally clear users table or use a test-specific user
 
   const userData = {
@@ -49,8 +49,8 @@ beforeAll(async () => {
       email: userData.email,
       password: userData.password
     });
-    accessToken = res.body.accessToken;
-    console.log(accessToken, res.body);
+  accessToken = res.body.accessToken;
+  console.log(accessToken, res.body);
 });
 
 afterAll(async () => {
@@ -62,15 +62,15 @@ afterAll(async () => {
 });
 
 test('sanity check for userController', () => {
-    expect(true).toBe(true);
-  });
+  expect(true).toBe(true);
+});
 
 describe('User Controller', () => {
 
   test('Get users', async () => {
     const res = await request(app)
-    .get('/api/users')
-    .set('Authorization', `Bearer ${accessToken}`);
+      .get('/api/users')
+      .set('Authorization', `Bearer ${accessToken}`);
 
     console.log('get user', res.body);
 

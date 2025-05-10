@@ -1,6 +1,5 @@
 // tests/setupTestDB.js
 const pgmigrate = require('node-pg-migrate');
-
 module.exports = async () => {
   const migrationConfig = {
     databaseUrl: process.env.TEST_DATABASE_URL,
